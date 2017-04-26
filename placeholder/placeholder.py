@@ -35,17 +35,7 @@ settings.configure(
     MIDDLEWARE_CLASSES=(
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    ),
-    
-    INSTALLED_APPS=(
-        'django.contrib.staticfiles',
-    ),
-    
-   TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR,],
+       =    'DIRS': [TEMPLATES_DIR,],
     },
 ],
     STATICFILES_DIRS=(
