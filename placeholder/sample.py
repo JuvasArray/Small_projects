@@ -22,6 +22,7 @@ from PIL import Image, ImageDraw
 DEBUG=os.environ.get('DEBUG', 'on')=='on'
 SECRET_KEY=os.environ.get('SECRET_KEY', 'nk0@o!w)2#l$=!a&*dg9u0qo!w!b!%thk=3rdf$e$rqh&x*d0_')
 ALLOWED_HOSTS=os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
+BASE_DIR=os.path.dirname(__file__)
 
 # Settings configurations
 settings.configure(
@@ -33,6 +34,16 @@ settings.configure(
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ),
+    INSTALLED_APPS=(
+        'django.contrib.staticfiles',
+    ),
+    TEMPLATE_DIRS=(
+        os.path.join(BASE_DIR, 'templates'),
+    ),
+    STATICFILES_DIRS=(
+        os.path.join(BASE_DIR, 'static'),
+    ),
+    STATIC_URL='/static/',
 )
 
 # Classes
