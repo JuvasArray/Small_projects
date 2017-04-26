@@ -10,8 +10,10 @@ from django import forms
 from django.conf.urls import url
 from django.conf import settings
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.core.wsgi import get_wsgi_application
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import render
 from django.views.decorators.http import etag
 
 # Imports for pillow
@@ -22,8 +24,9 @@ from PIL import Image, ImageDraw
 DEBUG=os.environ.get('DEBUG', 'on')=='on'
 SECRET_KEY=os.environ.get('SECRET_KEY', 'nk0@o!w)2#l$=!a&*dg9u0qo!w!b!%thk=3rdf$e$rqh&x*d0_')
 ALLOWED_HOSTS=os.environ.get('ALLOWED_HOSTS', 'localhost').split(',')
-BASE_DIR=os.path.dirname(__file__)
 
+BASE_DIR=os.path.dirname(__file__)
+TEMPLATES_DIR=os.path.join(BASE_DIR, 'templates')
 # Settings configurations
 settings.configure(
     DEBUG=DEBUG,
@@ -34,12 +37,17 @@ settings.configure(
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ),
+    
     INSTALLED_APPS=(
         'django.contrib.staticfiles',
     ),
-    TEMPLATE_DIRS=(
-        os.path.join(BASE_DIR, 'templates'),
-    ),
+    
+   TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [TEMPLATES_DIR,],
+    },
+],
     STATICFILES_DIRS=(
         os.path.join(BASE_DIR, 'static'),
     ),
@@ -79,8 +87,8 @@ class ImageForm(forms.Form):
 				
 # Views, views.py
 def generate_etag(request, width, heigth):
-	    content = 'Placeholder: {0} x {1}'.format(width, height)
-    return hashlib.sha1(content.encode('utf-8')).hexdigest()
+	content = 'Placeholder: {0} x {1}'.format(width, height)
+	return hashlib.sha1(content.encode('utf-8')).hexdigest()
 
 # Placeholder
 @etag(generate_etag) 
@@ -94,7 +102,10 @@ def placeholder(request, width, heigth):
 	
 # Index	
 def index(request):
-	return HttpResponse('Hello world')
+	example = reverse('placeholder', kwargs={'width': 50, 'height':50})
+	context = {'example': request.build_absolute_uri(example)}
+	return render(request, 'home.html', context)
+        
 
 # Urls, urls.py
 urlpatterns=[
