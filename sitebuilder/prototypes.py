@@ -15,6 +15,7 @@ settings.configure(
     INSTALLED_APPS=(
         'django.contrib.staticfiles',
         'sitebuilder',
+        'compressor',
     ),
     TEMPLATES=(
         {
